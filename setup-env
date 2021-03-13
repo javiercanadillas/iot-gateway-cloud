@@ -1,0 +1,5 @@
+PROJECT_ID=javiermc-main-demos
+REGION=europe-west1
+REGISTRY_ID=gw-registry
+TOPIC=gw-topic
+SUBS=gw-subs
