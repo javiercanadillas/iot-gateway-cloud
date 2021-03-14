@@ -15,10 +15,10 @@
 # limitations under the License.
 
 python3 ./cloudiot_mqtt_gateway.py \
-  --registry_id=my-registry \
+  --registry_id=$REGISTRY_ID \
   --gateway_id=my-gateway \
-  --cloud_region=us-central1 \
-  --project_id=$GOOGLE_CLOUD_PROJECT \
+  --cloud_region=$REGION \
+  --project_id=$PROJECT_ID \
   --private_key_file=rsa_private.pem \
   --algorithm=RS256 \
   --ca_certs=roots.pem \
