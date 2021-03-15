@@ -7,7 +7,7 @@ STATE_TOPIC=gateway-state
 SUBS=gw-subs
 DEVICE_ID=wemos-d1-1
 DEVICE_ID_1=wemos-d1-1
-DEVICE_ID_2=wemos-d1-1
+DEVICE_ID_2=wemos-d1-2
 #This is the port used to connect to your Micropython device
 PORT=/dev/cu.usbserial-40
 
