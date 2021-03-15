@@ -9,7 +9,7 @@ sensor_config  = {
 }
 
 udp_config = {
-    'server_address': '192.168.0.159',
+    'server_address': '192.168.0.100',
     'port': 10000,
     'buffer_size': 4096
 }

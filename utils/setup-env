@@ -9,7 +9,7 @@ DEVICE_ID=wemos-d1-1
 DEVICE_ID_1=wemos-d1-1
 DEVICE_ID_2=wemos-d1-2
 #This is the port used to connect to your Micropython device
-PORT=/dev/cu.usbserial-40
+PORT=/dev/cu.usbserial-14230
 
 # This section readonly -- DO NOT EDIT FURTHER
 AMPY_PORT=$PORT

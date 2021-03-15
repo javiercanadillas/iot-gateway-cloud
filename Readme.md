@@ -281,7 +281,7 @@ udp_config = {
 Use the tool `deploy_device` that will help you deploy Micropython's code to the device:
 
 ```bash
-utils/deploy_device deploy-led
+utils/deploy_device deploy-main-led
 ```
 
 You can now disconnect your device.
@@ -297,7 +297,7 @@ If you have a second device with the SHT30 sensor hat, disconnect this first dev
 Use the tool `deploy_device` that will help you deploy Micropython's code to the device:
 
 ```bash
-utils/deploy_device deploy-sensor
+utils/deploy_device deploy-main-sensor
 ```
 
 You can now disconnect your device.
