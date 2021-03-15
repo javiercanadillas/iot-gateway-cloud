@@ -15,6 +15,6 @@ udp_config = {
 }
 
 wifi_config = {
-    'ssid':'SSID',
-    'password':'PASSWORD'
+    'ssid':'Shuttlecraft',
+    'password':'sw4iotuc3m'
 }
