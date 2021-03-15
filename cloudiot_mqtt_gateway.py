@@ -21,15 +21,19 @@ import ssl
 import time
 import json
 import socket
+import config
 from time import ctime
 
 import jwt
 import paho.mqtt.client as mqtt
 
+# Listen in all interfaces
 HOST = ''
-PORT = 10000
-BUFSIZE = 2048
-ADDR = (HOST, PORT)
+# I'd rather take the config parameters from config
+#PORT = 10000
+#BUFSIZE = 4096
+BUFSIZE = config.udp_config['buffer_size']
+ADDR = (HOST, config.udp_config['port'])
 
 udpSerSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udpSerSock.setblocking(False)
@@ -132,7 +136,7 @@ def on_disconnect(client, unused_userdata, rc):
 
 def on_publish(unused_client, userdata, mid):
     """Paho callback when a message is sent to the broker."""
-    print('on_publish, userdata {}, mid {}'.format(userdata, mid))
+    print('on_publish: userdata {}, mid {}'.format(userdata, mid))
 
     try:
         client_addr, message = gateway_state.pending_responses.pop(mid)
@@ -297,7 +301,9 @@ def main():
             continue
 
         action = command["action"]
+        print('Action is '.format(action))
         device_id = command["device"]
+        print('Device ID is '.format(action))
         template = '{{ "device": "{}", "command": "{}", "status" : "ok" }}'
 
         if action == 'event':

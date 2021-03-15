@@ -1,0 +1,12 @@
+adafruit-ampy==1.1.0
+bitstring==3.1.7
+cffi==1.14.5
+click==7.1.2
+cryptography==3.4.6
+ecdsa==0.16.1
+esptool==3.0
+pycparser==2.20
+pyserial==3.5
+python-dotenv==0.15.0
+reedsolo==1.5.4
+six==1.15.0

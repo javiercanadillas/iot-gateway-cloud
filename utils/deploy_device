@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+AMPY_PORT="${AMPY_PORT:-$(ls /dev/cu.* | grep usbserial)}"
+LIB_DIRNAME="lib"
+UTILS_DIRNAME="utils"
+PYBOARD="pyboard.py"
+readonly SCRIPT_NAME="${0##*/}"
+readonly SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
+deploy_libs_sensor() {
+  deploy_libs_led
+  pushd "${SCRIPT_DIR}/../${LIB_DIRNAME}" >/dev/null
+  for LIB in *; do
+    ampy put "${LIB}"
+  done
+}
+
+deploy_libs_led() {
+  ampy put config.py
+}
+
+deploy_main_sensor() {
+  deploy_libs_sensor
+  ampy put "${SCRIPT_DIR}/../main-sensor.py" main.py
+  ampy reset
+}
+
+deploy_main_led() {
+  deploy_libs_led
+  ampy put "${SCRIPT_DIR}/../main-led.py" main.py
+  ampy reset
+} 
+
+run_sensor() {
+  "${SCRIPT_DIR}/$PYBOARD" "${SCRIPT_DIR}/../main-sensor.py"
+}
+
+run_led() {
+  "${SCRIPT_DIR}/$PYBOARD" "${SCRIPT_DIR}/../main-led.py"
+}
+
+main::usage() {
+  cat << EOF
+Usage: ${__SCRIPT_NAME} [COMMAND] [OPTIONs]...
+Deploys code in the device
+
+COMMAND:
+  libs-sensor | ls                  Deploys the contents of the lib/ directory
+                                    and config.py in the device
+  libs-led | ll                     Deploys config.py in the device
+  run-sensor | rs                   Deploys the contents of the lib/ directory
+                                    and config.py in the device and remotely runs
+                                    main-sensor.py
+  run-led | rl                      Deploys config.py in the device and remotely
+                                    runs main-led.py
+  deploy-sensor | ds                Deploys all necessary sensor files and resets
+                                    the device
+  deploy-led | dl                   Deploys all necessary led files and resets
+                                    the device
+
+FLAGS:
+  -d|--debug                        Enable script debugging
+  -h|--help                         Shows this help text
+
+EXAMPLES:
+The following invocation uploads contents of lib/ and config.py to the device
+  $> ${__SCRIPT_NAME} ls
+EOF
+}
+
+# This function checks <command -option|--option argument>
+# If no argument is supplied, it fails
+arg_required() {
+  if [[ ! "${2:-}" || "${2:0:1}" = '-' ]]; then
+    echo "Option ${1} requires an argument."
+  fi
+}
+
+parse_command() {
+  # shellcheck disable=SC2064
+  trap "$(shopt -p nocasematch)" RETURN
+  shopt -s nocasematch
+
+  case "${1}" in
+  libs-sensor | ls)
+    deploy_libs_sensor
+    ;;
+  libs-led | ll)
+    deploy_libs_sensor
+    ;;
+  run-sensor | rs)
+    deploy_libs_sensor
+    run_sensor
+    ;;
+  run-led | rl)
+    deploy_libs_led
+    run_led
+    ;;
+  deploy-sensor | ds)
+    deploy_main_sensor
+    ;;
+  deploy-led | dl)
+    deploy_main_led
+    ;;
+  *) #Catch empty or not listed command
+    if [ -z "${1}" ]; then
+      echo "Error: command not supplied, try again."
+    else
+      echo "Error: invalid command \"${1}\""
+      echo ""
+      main::usage
+    fi
+    ;;
+  esac
+  exit
+}
+
+parse_args() {
+  # shellcheck disable=SC2064
+  trap "$(shopt -p nocasematch)" RETURN
+  shopt -s nocasematch
+
+  while [[ $# != 0 ]]; do
+    case "${1}" in
+    -d | --debug)
+      # This is imperfect, because the script has already processed some lines, including default
+      # variable values, but it's better than nothing
+      set -x
+      shift 1
+      ;;
+    -h | --help)
+      main::usage
+      exit
+      ;;
+    --* | -*=)
+      echo "Error: unsupported flag ${1}" >&2
+      exit 1
+      ;;
+    *)
+      PARAMS+=("${1}")
+      shift
+      ;;
+    esac
+  done
+}
+
+main() {
+  parse_args "${@}"
+  parse_command "${PARAMS[*]}"
+}
+
+main "${@}"

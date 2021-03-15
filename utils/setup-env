@@ -1,0 +1,19 @@
+# Modify this section
+PROJECT_ID=javiercm-main-demos
+REGION=europe-west1
+REGISTRY_ID=gw-registry
+TELEMETRY_TOPIC=gateway-telemetry
+STATE_TOPIC=gateway-state
+SUBS=gw-subs
+DEVICE_ID=wemos-d1-1
+DEVICE_ID_1=wemos-d1-1
+DEVICE_ID_2=wemos-d1-1
+#This is the port used to connect to your Micropython device
+PORT=/dev/cu.usbserial-40
+
+# This section readonly -- DO NOT EDIT FURTHER
+AMPY_PORT=$PORT
+ESPTOOL_PORT=$PORT
+PYBOARD_DEVICE=$PORT
+MINICOM=" -D $PORT"
+export PROJECT_ID REGISTRY_ID REGION TELEMETRY_TOPIC STATE_TOPIC SUBS PORT AMPY_PORT ESPTOOL_PORT PYBOARD_DEVICE MINICOM DEVICE_ID_1 DEVICE_ID_2 DEVICE_ID

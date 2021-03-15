@@ -1,0 +1,6 @@
+# Ignore specific files
+*.pem
+venv/
+*.bin
+*template
+tests/
